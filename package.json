@@ -1,0 +1,26 @@
+{
+  "name": "number-format",
+  "version": "1.0.0",
+  "description": "Node JS number format conversor",
+  "main": "lib/number-format.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pableke/number-format.git"
+  },
+  "keywords": [
+    "number",
+    "format",
+    "conversor",
+    "i18n",
+    "internationalization"
+  ],
+  "author": "Pablo Rosique",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pableke/number-format/issues"
+  },
+  "homepage": "https://github.com/pableke/number-format#readme"
+}
