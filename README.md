@@ -1,2 +1,2 @@
 # number-format
-Node JS number format conversor
+Node JS number format conversor package
