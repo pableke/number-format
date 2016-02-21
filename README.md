@@ -28,10 +28,6 @@ Some simple examples listed:
 	nf.format(1543.045687, "hammer");
 	// 1.543,04
 
-	// ...Or pass your own mask directly
-	nf.format(4567.25, "# ##0.##");
-	// 4 567
-
 	// Reverse action: you can pass a string parameter in some format, and transform it in a number
 	nf.toNumber("1101-0001", "binary");
 	// 209
