@@ -2,13 +2,6 @@
 
 Node JS number format conversor package for Pablo Rosique.
 
-## Installation
-
-```bash
-$ npm install number-format
-$ number-format --help
-```
-
 ## Usage
 
 Some simple examples listed:
