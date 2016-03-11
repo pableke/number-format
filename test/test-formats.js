@@ -21,13 +21,13 @@ console.log("toNumber --- test");
 console.log("-----------------");
 
 var _numbers = {
-	"float": "438274.32",
-	"#.##0,0": "483.2",
-	"binary": "0001-1111-1011",
-	"hex": "01.b6"
+	"438274.32": "float",
+	"483,2": {section: ".", decimal: ","} ,
+	"0001-1111-1011": "binary",
+	"01.b6": "hex"
 };
 
-Object.keys(_numbers).forEach(function(mask) {
-	console.log(mask + " - " + _numbers[mask]);
-	console.log(nf.toNumber(_numbers[mask], mask));
+Object.keys(_numbers).forEach(function(value) {
+	console.log(_numbers[value] + " - " + value);
+	console.log(nf.toNumber(value, _numbers[value]));
 });
