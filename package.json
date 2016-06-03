@@ -3,13 +3,10 @@
   "version": "1.0.0",
   "description": "Node JS number format conversor",
   "main": "lib/number-format.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/pableke/number-format.git"
-  },
+  "author": "Pablo Rosique <pableke@gmail.com>",
+  "license": "ISC",
+  "homepage": "https://github.com/pableke/number-format",
+  "repository": "pableke/number-format",
   "keywords": [
     "number",
     "format",
@@ -17,10 +14,7 @@
     "i18n",
     "internationalization"
   ],
-  "author": "Pablo Rosique",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/pableke/number-format/issues"
-  },
-  "homepage": "https://github.com/pableke/number-format#readme"
+  "scripts": {
+    "test": "node test/test-formats.js"
+  }
 }
