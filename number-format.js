@@ -12,10 +12,8 @@ exports.masks = {
 };
 
 function lpad(val, len) {
-	len = len || 2;
-	while (val.length < len) {
+	for (len = len || 2; val.length < len; )
 		val = "0" + val;
-	}
 	return val;
 };
 
@@ -54,8 +52,9 @@ var _format = function(v, n, x, s, c, b) {
 var _number = function(v, s, c, b) {
 	if (typeof v != "string")
 		return v;
-	var reWholePart = new RegExp("[\s" + s + "]+", "g");
-	var num = b ? parseInt(v.replace(reWholePart, "").replace(c, ""), b)
+	var reWholePart = new RegExp("[\\s" + s + "]+", "g");
+	var num = (b && (b != 10))
+				? parseInt(v.replace(reWholePart, "").replace(c, ""), b)
 				: parseFloat(v.replace(reWholePart, "").replace(c, "."));
 	return isNaN(num) ? parseFloat(v) : num;
 };
@@ -81,7 +80,7 @@ exports.format = function(value, mask) {
 	if (isNaN(+value))
 		return value; // return as it is.
 	var opts = _self.masks[mask] || mask || _self.masks["default"];
-	return _format(value, opts.decimals, opts.whole, 
-					opts.section, opts.decimal, 
+	return _format(value, opts.decimals, opts.whole,
+					opts.section, opts.decimal,
 					opts.base);
 };

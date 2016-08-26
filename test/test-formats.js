@@ -1,5 +1,5 @@
 
-var nf = require('../lib/number-format');
+var nf = require('../number-format');
 
 function random(min, max) {
 	return (Math.random() * (max || 10)) + (min || 1);
