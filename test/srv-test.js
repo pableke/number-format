@@ -10,9 +10,11 @@ console.log("formats -- test");
 console.log("---------------");
 
 Object.keys(nf.masks).forEach(function(mask) {
-	var num = random(10, 1000);
+	var num = random(100, 10000);
+	var fmt = nf.format(num, mask);
 	console.log(mask + " - " + num);
-	console.log(nf.format(num, nf.masks[mask]));
+	console.log("format = " + fmt);
+	console.log("toNumber = " + nf.toNumber(fmt, mask));
 });
 
 console.log("\n\n");
@@ -20,14 +22,14 @@ console.log("-----------------");
 console.log("toNumber --- test");
 console.log("-----------------");
 
-var _numbers = {
+var numbers = {
 	"438274.32": "float",
 	"483,2": {section: ".", decimal: ","} ,
 	"0001-1111-1011": "binary",
 	"01.b6": "hex"
 };
 
-Object.keys(_numbers).forEach(function(value) {
-	console.log(_numbers[value] + " - " + value);
-	console.log(nf.toNumber(value, _numbers[value]));
+Object.keys(numbers).forEach(function(value) {
+	console.log(numbers[value] + " - " + value);
+	console.log(nf.toNumber(value, numbers[value]));
 });
