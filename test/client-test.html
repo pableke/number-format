@@ -39,15 +39,15 @@
 	var numbers = Array(100).fill(1).map(n => random(1000, 100000));
 	Object.keys(nf.masks).forEach(function(mask, i) {
 		var fmt = nf.format(numbers[i], mask);
-		$("div#nf").append("<div>Number: " + numbers[i] + " / mask: " + mask 
-							+ " => " + fmt + "<br>Number: " + nf.toNumber(fmt, mask) 
+		$("div#nf").append("<div>Number: " + numbers[i] + " / mask: " + mask
+							+ " => " + fmt + "<br>Number: " + nf.toNumber(fmt, mask)
 							+ "</div><hr>");
 	});
 	var i = 50;
 	var mask = {section: "T", decimals: 4, decimal: "@"};
 	var fmt = nf.format(numbers[i], mask);
-	$("div#nf").append("<div>Number: " + numbers[i] + " / mask: " + mask 
-						+ " => " + fmt + "<br>Number: " + nf.toNumber(fmt, mask) 
+	$("div#nf").append("<div>Number: " + numbers[i] + " / mask: " + mask
+						+ " => " + fmt + "<br>Number: " + nf.toNumber(fmt, mask)
 						+ "</div><hr>");
 </script>
 
