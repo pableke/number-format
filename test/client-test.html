@@ -11,32 +11,13 @@
 
 <h2>Number-Format Client Test</h2>
 <div id="nf">
-	<div id="nf" value="23/05/1826" mask="dd/mm/yyyy", dest="isoDate">
-		number-format(23/05/1826, dd/mm/yyyy, isoDate);
-	</div>
-	<span id="result"></span><hr>
-
-	<div id="nf" value="1/Aug/2000 15:10" mask="d/mmm/yyyy H:M" dest="latinDateTime">
-		number-format(1/Aug/2000 15:10, d/mmm/yyyy H:M, latinDateTime);
-	</div>
-	<span id="result"></span><hr>
-
-	<div id="nf" value="3-8-1999 4:17:2" mask="dd-mm-yyyy HH:M:s" dest="fullDate">
-		number-format(3-8-1999 4:17:2, dd-mm-yyyy HH:M:s, fullDate);
-	</div>
-	<span id="result"></span><hr>
-
-	<div id="nf" value="October 7 2008 09:36:12" mask="mmmm dd yyyy H:M:s" dest="dateTime">
-		number-format(October 7 2008 09:36:12, mmmm dd yyyy H:M:s, dateTime);
-	</div>
-	<span id="result"></span><hr>
 </div>
 
 <script type="text/javascript">
 	$("div#nf").empty();
 	var nf = new NumberFormat();
 	function random(min, max) { return (Math.random() * max) + min; };
-	var numbers = Array(100).fill(1).map(n => random(1000, 100000));
+	var numbers = Array(100).fill(1).map(n => random(100000, 10000000));
 	Object.keys(nf.masks).forEach(function(mask, i) {
 		var fmt = nf.format(numbers[i], mask);
 		$("div#nf").append("<div>Number: " + numbers[i] + " / mask: " + mask

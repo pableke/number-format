@@ -1,5 +1,10 @@
 'use strict';
 
+var self = this; //auto-reference
+const binMask = /[^01]+/g;
+const decMask = /[^0-9e]+/gi;
+const hexMask = /[^0-9a-f]/gi;
+
 var masks = exports.masks = {
 	default: { decimals: 2, whole: 3, section: ",", decimal: "." },
 	float:   { decimals: 2, whole: 3, section: ",", decimal: "." },
@@ -59,8 +64,17 @@ var _number = function(v, s, c, b) {
  * @param string/object mask: input value format
  */
 exports.toNumber = function(value, mask) {
+	if (typeof value != "string") return value;
 	var opts = masks[mask] || mask || masks.default;
-	return _number(value, opts.section, opts.decimal, opts.base);
+	if (opts.base == 2)
+		return parseInt(value.replace(binMask, ""), 2);
+	if (opts.base == 16)
+		return parseInt(value.replace(hexMask, ""), 16);
+	var i = value.lastIndexOf(opts.decimal);
+	var num = value.replace(decMask, "");
+	if (i < 0) return parseFloat(num);
+	i = num.length - (value.length - i) + 1;
+	return parseFloat(num.substr(0, i) + "." + num.substr(i));
 };
 
 /**
@@ -72,6 +86,17 @@ exports.toNumber = function(value, mask) {
 exports.format = function(value, mask) {
 	if (isNaN(+value)) return value; // return as it is.
 	var opts = masks[mask] || mask || masks.default;
-	return _format(value, opts.whole || 3, opts.decimals || 0, 
+	return _format(value, opts.whole || 3, opts.decimals || 0,
 					opts.section, opts.decimal, opts.base);
+};
+
+/**
+ * trNumber(value, mask, dest)
+ *
+ * @param string value: value to format
+ * @param string/object mask: format to apply
+ * @param string/object dest: destination mask
+ */
+exports.trNumber = function(value, mask, dest) {
+	return self.format(self.toNumber(value, mask), dest || mask);
 };
