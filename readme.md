@@ -1,10 +1,10 @@
 # number-format
 
-Node JS number format conversor package for Pablo Rosique.
+Node JS and JavaScript client side number format conversor.
 
 ## Usage
 
-Some simple examples listed:
+Some simple Node JS examples listed:
 ```js
 	var nf = require("number-format");
 
@@ -17,9 +17,9 @@ Some simple examples listed:
 	// 4 567
 
 	// ...Or add your own
-	nf.masks.hammer = '#.##0,0';
+	nf.masks.hammer = {section: "T", decimals: 4, decimal: "@"};
 	nf.format(1543.045687, "hammer");
-	// 1.543,04
+	// 1T543@0456
 
 	// Reverse action: you can pass a string parameter in some format, and transform it in a number
 	nf.toNumber("1101-0001", "binary");
