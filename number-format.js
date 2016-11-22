@@ -2,7 +2,7 @@
 
 var self = this; //auto-reference
 const binMask = /[^01]+/g;
-const decMask = /[^0-9e]+/gi;
+const intMask = /[^0-9e\-]+/gi;
 const hexMask = /[^0-9a-f]/gi;
 
 var masks = exports.masks = {
@@ -36,25 +36,9 @@ function chunk(str, size) {
  * @param integer b: number base format (default base 10)
 */
 var _format = function(v, x, n, s, c, b) {
-	var num = b ? chunk((~~v).toString(b), x) : v.toFixed(Math.max(0, n));
+	var num = (b && (b != 10)) ? chunk((v >>> 0).toString(b), x) : v.toFixed(Math.max(0, n));
 	var re = new RegExp("[0-9a-f](?=([0-9a-f]{" + x + "})+" + (n > 0 ? "\\D" : "$") + ")", "gi");
 	return (c ? num.replace(".", c) : num).replace(re, "$&" + (s || ","));
-};
-
-/**
- * _number(v, s, c)
- *
- * @param string  v: value to format
- * @param mixed   s: sections delimiter
- * @param mixed   c: decimal delimiter
- * @param integer b: number base format (default base 10)
- */
-var _number = function(v, s, c, b) {
-	if (typeof v != "string") return v;
-	var reWholePart = new RegExp("[\\s" + s + "]+", "g");
-	var num = (b && (b != 10)) ? parseInt(v.replace(reWholePart, "").replace(c, ""), b)
-								: parseFloat(v.replace(reWholePart, "").replace(c, "."));
-	return isNaN(num) ? parseFloat(v) : num;
 };
 
 /**
@@ -67,11 +51,11 @@ exports.toNumber = function(value, mask) {
 	if (typeof value != "string") return value;
 	var opts = masks[mask] || mask || masks.default;
 	if (opts.base == 2)
-		return parseInt(value.replace(binMask, ""), 2);
+		return parseInt(value.replace(binMask, ""), 2) >> 0; // to int32
 	if (opts.base == 16)
-		return parseInt(value.replace(hexMask, ""), 16);
+		return parseInt(value.replace(hexMask, ""), 16) >> 0; // to int32
 	var i = value.lastIndexOf(opts.decimal);
-	var num = value.replace(decMask, "");
+	var num = value.replace(intMask, "");
 	if (i < 0) return parseFloat(num);
 	i = num.length - (value.length - i) + 1;
 	return parseFloat(num.substr(0, i) + "." + num.substr(i));
