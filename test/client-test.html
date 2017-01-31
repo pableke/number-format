@@ -17,18 +17,17 @@
 	$("div#nf").empty();
 	var nf = new NumberFormat();
 	function random(min, max) { return (Math.random() * max) + min; };
-	var signs = Array(100).fill(1).map(n => (Math.random()*2|0 || -1));
-	var numbers = Array(100).fill(1).map((n, i) => (signs[i] * random(100000, 10000000)));
 	Object.keys(nf.masks).forEach(function(mask, i) {
-		var fmt = nf.format(numbers[i], mask);
-		$("div#nf").append("<div>Number: " + numbers[i] + " / mask: " + mask
+		var num = ((Math.random() < 0.5) ? -1 : 1) * random(100000, 10000000);
+		var fmt = nf.format(num, mask);
+		$("div#nf").append("<div>Number: " + num + " / mask: " + mask
 							+ " => " + fmt + "<br>Number: " + nf.toNumber(fmt, mask)
 							+ "</div><hr>");
 	});
-	var i = 50;
-	var mask = {section: "T", decimals: 4, decimal: "@"};
-	var fmt = nf.format(numbers[i], mask);
-	$("div#nf").append("<div>Number: " + numbers[i] + " / mask: " + mask
+	var num = ((Math.random() < 0.5) ? -1 : 1) * random(100000, 10000000);
+	var mask = { section: "T", decimals: 4, decimal: "@" };
+	var fmt = nf.format(num, mask);
+	$("div#nf").append("<div>Number: " + num + " / mask: " + mask
 						+ " => " + fmt + "<br>Number: " + nf.toNumber(fmt, mask)
 						+ "</div><hr>");
 </script>

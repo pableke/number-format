@@ -1,6 +1,5 @@
 
 function NumberFormat() {
-	var self = this; //auto-reference
 	const binMask = /[^01]+/g;
 	const intMask = /[^0-9e\-]+/gi;
 	const hexMask = /[^0-9a-f]/gi;
@@ -14,31 +13,11 @@ function NumberFormat() {
 	};
 	this.masks = masks;
 
-	function lpad(val, len) {
-		while (val.length < len)
-			val = "0" + val;
-		return val;
-	};
-
-	function chunk(str, size) {
-		var parts = Math.ceil(str.length / size);
-		return lpad(str, parts * size);
-	};
-
-	/**
-	 * _format(n, x, s, c, b)
-	 *
-	 * @param integer v: value to format
-	 * @param integer x: length of whole part
-	 * @param integer n: length of decimal part
-	 * @param mixed   s: sections delimiter (default ,)
-	 * @param mixed   c: decimal delimiter (default .)
-	 * @param integer b: number base format (default base 10)
-	*/
-	var _format = function(v, x, n, s, c, b) {
-		var num = (b && (b != 10)) ? chunk((v >>> 0).toString(b), x) : v.toFixed(Math.max(0, n));
-		var re = new RegExp("[0-9a-f](?=([0-9a-f]{" + x + "})+" + (n > 0 ? "\\D" : "$") + ")", "gi");
-		return (c ? num.replace(".", c) : num).replace(re, "$&" + (s || ","));
+	String.prototype.lpad = function(value, length) {
+		var str = this;
+		while (str.length < length)
+			str = value + str;
+		return str;
 	};
 
 	/**
@@ -48,7 +27,7 @@ function NumberFormat() {
 	 * @param string/object mask: input value format
 	 */
 	this.toNumber = function(value, mask) {
-		if (typeof value != "string") return value;
+		if (typeof value !== "string") return value;
 		var opts = masks[mask] || mask || masks.default;
 		if (opts.base == 2)
 			return parseInt(value.replace(binMask, ""), 2) >> 0; // to int32
@@ -68,10 +47,34 @@ function NumberFormat() {
 	 * @param string/object mask: format to apply
 	 */
 	this.format = function(value, mask) {
-		if (isNaN(+value)) return value; // return as it is.
+		if (isNaN(value)) return value; // return as it is.
 		var opts = masks[mask] || mask || masks.default;
-		return _format(value, opts.whole || 3, opts.decimals || 0,
-						opts.section, opts.decimal, opts.base);
+		opts.whole = opts.whole || 3; //default = 3
+		opts.base = opts.base || 10; //default = 10
+		if (opts.base != 10) {
+			value = (value >>> 0).toString(opts.base);
+			value = value.lpad("0", Math.ceil(value.length / opts.whole) * opts.whole);
+		}
+
+		var parts = value.toString().split(".");
+		var whole = parts.shift(); //whole part
+		var decimal = parts.shift() || ""; //decimal part
+		var sign = (whole.charAt(0) == "-") ? "-" : "";
+		if ((whole.charAt(0) == "-") || (whole.charAt(0) == "+"))
+			whole = whole.substr(1);
+
+		var result = []; //parts container
+		var i = whole.length % opts.whole;
+		i && result.push(whole.substr(0, i));
+		while (i < whole.length) {
+			result.push(whole.substr(i, opts.whole));
+			i += opts.whole;
+		}
+		decimal += "0000000000000000000000000";
+		decimal = (opts.decimal && opts.decimals) 
+				? (opts.decimal + decimal.substr(0, opts.decimals)) 
+				: "";
+		return sign + result.join(opts.section) + decimal;
 	};
 
 	/**
@@ -82,6 +85,6 @@ function NumberFormat() {
 	 * @param string/object dest: destination mask
 	 */
 	this.trNumber = function(value, mask, dest) {
-		return self.format(self.toNumber(value, mask), dest || mask);
+		return this.format(this.toNumber(value, mask), dest || mask);
 	};
 };
