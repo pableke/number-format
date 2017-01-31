@@ -13,11 +13,10 @@ function NumberFormat() {
 	};
 	this.masks = masks;
 
-	String.prototype.lpad = function(value, length) {
-		var str = this;
-		while (str.length < length)
-			str = value + str;
-		return str;
+	function lpad(val, len) {
+		while (val.length < len)
+			val = "0" + val;
+		return val;
 	};
 
 	/**
@@ -51,18 +50,24 @@ function NumberFormat() {
 		var opts = masks[mask] || mask || masks.default;
 		opts.whole = opts.whole || 3; //default = 3
 		opts.base = opts.base || 10; //default = 10
+		var sign, whole, decimal; //number parts
+		sign = whole = decimal = "";
 		if (opts.base != 10) {
 			value = (value >>> 0).toString(opts.base);
-			value = value.lpad("0", Math.ceil(value.length / opts.whole) * opts.whole);
+			whole = lpad(value, Math.ceil(value.length / opts.whole) * opts.whole);
 		}
-
-		var parts = value.toString().split(".");
-		var whole = parts.shift(); //whole part
-		var decimal = parts.shift() || ""; //decimal part
-		var sign = (whole.charAt(0) == "-") ? "-" : "";
-		if ((whole.charAt(0) == "-") || (whole.charAt(0) == "+"))
-			whole = whole.substr(1);
-
+		else {
+			var parts = value.toString().split(".");
+			whole = parts.shift(); //whole part
+			decimal = parts.shift() || ""; //decimal part
+			decimal += "000000000000000000000000000";
+			decimal = (opts.decimal && opts.decimals)
+					? (opts.decimal + decimal.substr(0, opts.decimals))
+					: "";
+			sign = (whole.charAt(0) == "-") ? "-" : sign;
+			if ((whole.charAt(0) == "-") || (whole.charAt(0) == "+"))
+				whole = whole.substr(1);
+		}
 		var result = []; //parts container
 		var i = whole.length % opts.whole;
 		i && result.push(whole.substr(0, i));
@@ -70,10 +75,6 @@ function NumberFormat() {
 			result.push(whole.substr(i, opts.whole));
 			i += opts.whole;
 		}
-		decimal += "0000000000000000000000000";
-		decimal = (opts.decimal && opts.decimals) 
-				? (opts.decimal + decimal.substr(0, opts.decimals)) 
-				: "";
 		return sign + result.join(opts.section) + decimal;
 	};
 
