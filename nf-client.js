@@ -26,7 +26,8 @@ function NumberFormat() {
 	 * @param string/object mask: input value format
 	 */
 	this.toNumber = function(value, mask) {
-		if (typeof value !== "string") return value;
+		if (!value || (typeof value != "string"))
+			return value; //return value as it is.
 		var opts = masks[mask] || mask || masks.default;
 		if (opts.base == 2)
 			return parseInt(value.replace(binMask, ""), 2) >> 0; // to int32
